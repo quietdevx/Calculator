@@ -1,29 +1,35 @@
- **Calculator**
+# **Tkinter Calculator**
 
 This is a Python project I made while learning Python.
 
- **What it does**
+**What it does**
 
-A calculator that can handle 2 digit addition, subtraction, multiplication and division.
+A calculator with a graphical interface that can perform calculations using multiple operators.
 
- **Features**
+**Features**
 
-- Error Handling 
-- Simple addition, subtraction, multiplication and division.
+* Graphical calculator interface
+* Multiple operators in one calculation
+* Clear and backspace buttons
+* Error handling for invalid calculations
 
-  **What I learned**
+**What I learned**
 
-- ZeroDivisionError and how to handle it.
+* Tkinter and creating GUI applications
+* Using `grid()` to organise widgets
+* Using functions and lambda functions with buttons
+* Using `eval()` to calculate equations
 
- **How to run**
+**How to run**
 
-Download the files and run the Python file.
+Run the Python file to open the calculator.
 
- **Made with**
+**Made with**
 
-Python
+Python and Tkinter.
 
- **Future improvements**
+**Future improvements**
 
-- Multiple number handling
-- UI
+* Make the percentage button work properly
+* Add keyboard support
+* Improve the calculator design
