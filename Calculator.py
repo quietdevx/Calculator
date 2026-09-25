@@ -1,57 +1,176 @@
-print("--------------------\nCalculator\n--------------------")
-while True:
-    try:
-        num1 = float(input("Enter first number: "))
-        num2 = float(input("Enter second number: "))
-        break
-    except ValueError:
-        print("Invalid input")
-        continue
-    
+import tkinter as tk
+
+root = tk.Tk()
+root.title("Calculator")
+
+screen_width = root.winfo_screenwidth()
+screen_height = root.winfo_screenheight()
+
+task_bar_height = 50
+window_height = screen_height - task_bar_height
+
+root.geometry(f"{screen_width}x{window_height}+0+0")
+
+# Make columns equal
+for i in range(4):
+    root.columnconfigure(i, weight=1)
+
+for i in range(7):
+    root.rowconfigure(i, weight=1)
+
+equation = ""
+
+
+# ---------- FUNCTIONS ----------
+
+def update_display():
+    display.config(state="normal")
+    display.delete(0, tk.END)
+    display.insert(0, equation)
+    display.config(state="readonly")
+
+
+def press(value):
+    global equation
+
+    equation += value
+    update_display()
+
+
+def clear():
+    global equation
+
+    equation = ""
+    update_display()
+
+
+def backspace():
+    global equation
+
+    equation = equation[:-1]
+    update_display()
+
 
 def calculate():
-  print("1. Add")
-  print("2. Subtract")
-  print("3. Multiply")
-  print("4. Divide")
+    global equation
 
-  operation = input("Enter operation: ")
-
-  if operation == "1":
-      print(num1 + num2)
-
-  elif operation == "2":
-      print(num1 - num2)
-
-  elif operation == "3":
-      print(num1 * num2)
-
-  elif operation == "4":
     try:
-      print(num1 / num2)
-    except ZeroDivisionError:
-      print("Cannot divide by zero")
-      close()
-  else:
-      print("Invalid operation")
-      close()
+        equation = str(eval(equation))
+        update_display()
+
+    except:
+        equation = ""
+        display.config(state="normal")
+        display.delete(0, tk.END)
+        display.insert(0, "Error")
+        display.config(state="readonly")
 
 
+# ---------- TITLE ----------
+
+title = tk.Label(
+    root,
+    text="Calculator",
+    font=("Arial", 40)
+)
+
+title.grid(
+    row=0,
+    column=0,
+    columnspan=4,
+    pady=20
+)
 
 
-def close():
-    print("Do you want to calculate again? (Y/N)")
-    choice = input("").strip().upper()
-    if choice == "Y":
-        calculate()
-    elif choice == "N":
-        print("Goodbye!")
-        exit()
+# ---------- DISPLAY ----------
+
+display = tk.Entry(
+    root,
+    font=("Arial", 35),
+    justify="right",
+    state="readonly"
+)
+
+display.grid(
+    row=1,
+    column=0,
+    columnspan=4,
+    padx=40,
+    pady=20,
+    sticky="ew"
+)
+
+
+# ---------- BUTTONS ----------
+
+buttons = [
+    ("%", 2, 0),
+    ("CE", 2, 1),
+    ("C", 2, 2),
+    ("⌫", 2, 3),
+
+    ("7", 3, 0),
+    ("8", 3, 1),
+    ("9", 3, 2),
+    ("÷", 3, 3),
+
+    ("4", 4, 0),
+    ("5", 4, 1),
+    ("6", 4, 2),
+    ("×", 4, 3),
+
+    ("1", 5, 0),
+    ("2", 5, 1),
+    ("3", 5, 2),
+    ("−", 5, 3),
+
+    ("0", 6, 0),
+    (".", 6, 1),
+    ("=", 6, 2),
+    ("+", 6, 3)
+]
+
+
+for text, row, column in buttons:
+
+    if text == "C" or text == "CE":
+        command = clear
+
+    elif text == "⌫":
+        command = backspace
+
+    elif text == "÷":
+        command = lambda: press("/")
+
+    elif text == "×":
+        command = lambda: press("*")
+
+    elif text == "−":
+        command = lambda: press("-")
+
+    elif text == "=":
+        command = calculate
+
+    elif text == "%":
+        command = lambda: press("%")
+
     else:
-        print("Please enter Y or N")
-        close()
+        command = lambda x=text: press(x)
+
+    button = tk.Button(
+        root,
+        text=text,
+        font=("Arial", 25),
+        command=command
+    )
+
+    button.grid(
+        row=row,
+        column=column,
+        padx=5,
+        pady=5,
+        sticky="nsew"
+    )
 
 
-calculate()
-
-
+root.mainloop()
